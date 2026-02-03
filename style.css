@@ -8,7 +8,11 @@ body {
     height: 100vh;
     margin: 0;
 }
-h1 { font-size: 5rem; }
+h1 { 
+    font-family:'Seven Segment', monospace;
+   font-size: 5rem;
+    margin-bottom: 20px;
+}
 button {
     background: transparent;
     border: 2px solid #00ff41;

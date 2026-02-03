@@ -16,7 +16,6 @@ function actualizarDisplay() {
     const texto = `${minutos < 10 ? '0' : ''}${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
     
     elementoReloj.textContent = texto;
-    document.title = `${texto} - Zen Focus`;
 }
 
 function alternarTemporizador() {
