@@ -17,3 +17,22 @@ button {
     font-size: 1.2rem;
     cursor: pointer;
 }
+.buttons {
+    display: flex;
+    gap: 20px; /* Separación entre botones */
+}
+
+button {
+    background: transparent;
+    border: 2px solid #00ff41;
+    color: #00ff41;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #00ff41;
+    color: #000; /* Efecto invertido al pasar el ratón */
+}

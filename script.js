@@ -1,43 +1,72 @@
-let tiempoRestante = 25 * 60; // 25 minutos convertidos a segundos
-let intervalo = null; // Aquí guardaremos el ID del "metrónomo"
+let tiempoOriginal = 25 * 60; // 25 minutos
+let tiempoRestante = tiempoOriginal;
+let intervalo = null;
+let enPausa = true;
 
 const elementoReloj = document.querySelector('h1');
-const botonEmpezar = document.getElementById('start');
+const botonStart = document.getElementById('start');
+const botonReset = document.getElementById('reset');
+const sonidoAlarma = document.getElementById('alarma');
 
-// Función para pintar el tiempo en pantalla (formato 00:00)
 function actualizarDisplay() {
     const minutos = Math.floor(tiempoRestante / 60);
     const segundos = tiempoRestante % 60;
-
-    // Operador ternario (un if compacto): ¿Es menor de 10? Ponle un '0' delante.
-    const textoMinutos = minutos < 10 ? '0' + minutos : minutos;
-    const textoSegundos = segundos < 10 ? '0' + segundos : segundos;
-
-    elementoReloj.textContent = `${textoMinutos}:${textoSegundos}`;
     
-    // Bonus: Cambia el título de la pestaña del navegador también
-    document.title = `${textoMinutos}:${textoSegundos} - Zen Focus`;
+    // Formato 00:00
+    const texto = `${minutos < 10 ? '0' : ''}${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
+    
+    elementoReloj.textContent = texto;
+    document.title = `${texto} - Zen Focus`;
 }
 
-function iniciarPomodoro() {
-    if (intervalo) return; // Si ya está corriendo, no hacemos nada (evita bugs de doble click)
+function alternarTemporizador() {
+    if (enPausa) {
+        // INICIAR
+        iniciar();
+    } else {
+        // PAUSAR
+        pausar();
+    }
+}
 
-    console.log("Temporizador iniciado");
+function iniciar() {
+    if (!enPausa) return; // Ya está corriendo
+    
+    enPausa = false;
+    botonStart.textContent = "Pausar"; // Cambiamos el texto del botón
     
     intervalo = setInterval(() => {
-        tiempoRestante--; // Restamos 1 segundo
+        tiempoRestante--;
         actualizarDisplay();
 
-        // Cuando llega a 0
         if (tiempoRestante <= 0) {
-            clearInterval(intervalo); // Paramos el metrónomo
-            intervalo = null;
-            tiempoRestante = 25 * 60; // Reseteamos para la próxima
-            alert("¡Tiempo! Descansa 5 minutos.");
-            actualizarDisplay();
+            clearInterval(intervalo);
+            sonidoAlarma.play(); // ¡SONIDO! 🔔
+            alert("¡Tiempo terminado! Tómate un descanso.");
+            resetear(); // Volvemos al inicio automáticamente
         }
-    }, 1000); // Se ejecuta cada 1000 milisegundos (1 segundo)
+    }, 1000);
 }
 
-// Conectamos el botón con la función
-botonEmpezar.addEventListener('click', iniciarPomodoro);
+function pausar() {
+    if (enPausa) return;
+    
+    clearInterval(intervalo);
+    intervalo = null;
+    enPausa = true;
+    botonStart.textContent = "Continuar"; // Feedback visual
+}
+
+function resetear() {
+    pausar(); // Primero paramos si estaba corriendo
+    tiempoRestante = tiempoOriginal;
+    botonStart.textContent = "Empezar";
+    actualizarDisplay();
+}
+
+// Event Listeners
+botonStart.addEventListener('click', alternarTemporizador);
+botonReset.addEventListener('click', resetear);
+
+// Inicializar pantalla
+actualizarDisplay();
