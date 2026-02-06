@@ -1,21 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.cdnfonts.com/css/seven-segment" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <title>Pomodoro Zen</title>
 </head>
+
 <body>
-    <div class="container">
-        <h1>25:00</h1>
-        <div class="buttons">
-            <button id="start">Start</button>
-            <button id="reset">Reset</button>
+    <div class="app-container">
+        <header>
+            <div class="logo">Pomodoro Zen</div>
+            <div class="header-controls">
+                <button id="theme-toggle" class="icon-btn" title="Toggle Theme">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+                <button id="stats-btn" class="icon-btn" title="Statistics">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20V10"></path>
+                        <path d="M18 20V4"></path>
+                        <path d="M6 20v-4"></path>
+                    </svg>
+                </button>
+                <button id="settings-btn" class="icon-btn" title="Settings">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="pomodoro">Pomodoro</button>
+            <button class="mode-btn" data-mode="shortBreak">Short Break</button>
+            <button class="mode-btn" data-mode="longBreak">Long Break</button>
         </div>
-        
+
+        <div class="timer-display">
+            <h1 id="timer">25:00</h1>
+        </div>
+
+        <div class="task-container">
+            <input type="text" id="current-task" placeholder="What are you working on?" autocomplete="off">
+        </div>
+
+        <div class="controls">
+            <button id="start-pause" class="main-btn">Start</button>
+            <button id="reset" class="secondary-btn">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                    <path d="M3 3v5h5"></path>
+                </svg>
+            </button>
+        </div>
     </div>
+
+    <!-- Modals -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="setting-item">
+                <label>Pomodoro (min)</label>
+                <input type="number" id="pomodoro-time" value="25">
+            </div>
+            <div class="setting-item">
+                <label>Short Break (min)</label>
+                <input type="number" id="short-break-time" value="5">
+            </div>
+            <div class="setting-item">
+                <label>Long Break (min)</label>
+                <input type="number" id="long-break-time" value="15">
+            </div>
+            <div class="setting-item">
+                <label class="checkbox-label">
+                    <span>Auto-start Breaks?</span>
+                    <input type="checkbox" id="auto-start-breaks">
+                </label>
+            </div>
+            <div class="setting-item">
+                <label class="checkbox-label">
+                    <span>Auto-start Pomodoros?</span>
+                    <input type="checkbox" id="auto-start-pomodoros">
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div id="stats-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Statistics</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-total-sessions">0</span>
+                    <span class="stat-label">Sessions</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-total-time">0h</span>
+                    <span class="stat-label">Total Time</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="alarma" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
     <script src="script.js"></script>
 </body>
+
 </html>
